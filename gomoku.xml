@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="gomoku" default="all">
+  
+  
+  <property file="gomoku.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*.yarb/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.swc"/>
+    <include name="*.zip"/>
+    <include name="*.egg"/>
+    <include name="*.ane"/>
+    <include name="*.jar"/>
+    <include name="*.ear"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.sbt:_org.scala-lang.modules:scala-swing_2.12:2.0.0-m2:jar.classpath">
+    <pathelement location="${basedir}/../../.ivy2/cache/org.scala-lang.modules/scala-swing_2.12/bundles/scala-swing_2.12-2.0.0-M2.jar"/>
+  </path>
+  
+  <path id="library.sbt:_org.scala-lang:scala-library:2.12.3:jar.classpath">
+    <pathelement location="${basedir}/../../.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.12.3.jar"/>
+  </path>
+  
+  
+  <!-- Global Libraries -->
+  <!-- Register Custom Compiler Taskdefs -->
+  <property name="javac2.home" value="${idea.home}/lib"/>
+  <path id="javac2.classpath">
+    <pathelement location="${javac2.home}/javac2.jar"/>
+    <pathelement location="${javac2.home}/jdom.jar"/>
+    <pathelement location="${javac2.home}/asm-all.jar"/>
+    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+  </path>
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
+  </target>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module gomoku2 -->
+  
+  <dirname property="module.gomoku2.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.gomoku2" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.gomoku2" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.gomoku2" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.gomoku2" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="gomoku2.output.dir" value="${module.gomoku2.basedir}/target/scala-2.12/classes"/>
+  <property name="gomoku2.testoutput.dir" value="${module.gomoku2.basedir}/target/scala-2.12/test-classes"/>
+  
+  <path id="gomoku2.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="gomoku2.module.production.classpath">
+    <path refid="${module.jdk.classpath.gomoku2}"/>
+    <path refid="library.sbt:_org.scala-lang:scala-library:2.12.3:jar.classpath"/>
+    <path refid="library.sbt:_org.scala-lang.modules:scala-swing_2.12:2.0.0-m2:jar.classpath"/>
+  </path>
+  
+  <path id="gomoku2.runtime.production.module.classpath">
+    <pathelement location="${gomoku2.output.dir}"/>
+    <path refid="library.sbt:_org.scala-lang:scala-library:2.12.3:jar.classpath"/>
+    <path refid="library.sbt:_org.scala-lang.modules:scala-swing_2.12:2.0.0-m2:jar.classpath"/>
+  </path>
+  
+  <path id="gomoku2.module.classpath">
+    <path refid="${module.jdk.classpath.gomoku2}"/>
+    <pathelement location="${gomoku2.output.dir}"/>
+    <path refid="library.sbt:_org.scala-lang:scala-library:2.12.3:jar.classpath"/>
+    <path refid="library.sbt:_org.scala-lang.modules:scala-swing_2.12:2.0.0-m2:jar.classpath"/>
+  </path>
+  
+  <path id="gomoku2.runtime.module.classpath">
+    <pathelement location="${gomoku2.testoutput.dir}"/>
+    <pathelement location="${gomoku2.output.dir}"/>
+    <path refid="library.sbt:_org.scala-lang:scala-library:2.12.3:jar.classpath"/>
+    <path refid="library.sbt:_org.scala-lang.modules:scala-swing_2.12:2.0.0-m2:jar.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.gomoku2">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.gomoku2">
+    <patternset refid="excluded.from.module.gomoku2"/>
+  </patternset>
+  
+  <path id="gomoku2.module.sourcepath">
+    <dirset dir="${module.gomoku2.basedir}">
+      <include name="src/main/scala"/>
+      <include name="src/main/resources"/>
+    </dirset>
+  </path>
+  
+  <path id="gomoku2.module.test.sourcepath">
+    <dirset dir="${module.gomoku2.basedir}">
+      <include name="src/test/scala"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.gomoku2" depends="compile.module.gomoku2.production,compile.module.gomoku2.tests" description="Compile module gomoku2"/>
+  
+  <target name="compile.module.gomoku2.production" depends="register.custom.compilers" description="Compile module gomoku2; production classes">
+    <mkdir dir="${gomoku2.output.dir}"/>
+    <javac2 destdir="${gomoku2.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.gomoku2}/javac">
+      <compilerarg line="${compiler.args.gomoku2}"/>
+      <bootclasspath refid="gomoku2.module.bootclasspath"/>
+      <classpath refid="gomoku2.module.production.classpath"/>
+      <src refid="gomoku2.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.gomoku2"/>
+    </javac2>
+    
+    <copy todir="${gomoku2.output.dir}">
+      <fileset dir="${module.gomoku2.basedir}/src/main/scala">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.gomoku2.basedir}/src/main/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.gomoku2.tests" depends="register.custom.compilers,compile.module.gomoku2.production" description="compile module gomoku2; test classes" unless="skip.tests">
+    <mkdir dir="${gomoku2.testoutput.dir}"/>
+    <javac2 destdir="${gomoku2.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.gomoku2}/javac">
+      <compilerarg line="${compiler.args.gomoku2}"/>
+      <bootclasspath refid="gomoku2.module.bootclasspath"/>
+      <classpath refid="gomoku2.module.classpath"/>
+      <src refid="gomoku2.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.gomoku2"/>
+    </javac2>
+    
+    <copy todir="${gomoku2.testoutput.dir}">
+      <fileset dir="${module.gomoku2.basedir}/src/test/scala">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.gomoku2" description="cleanup module">
+    <delete dir="${gomoku2.output.dir}"/>
+    <delete dir="${gomoku2.testoutput.dir}"/>
+  </target>
+  
+  
+  <!-- Module gomoku2-build -->
+  
+  <dirname property="module.gomoku2-build.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.gomoku2-build" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.gomoku2-build" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.gomoku2-build" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.gomoku2-build" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="gomoku2-build.output.dir" value="${module.gomoku2-build.basedir}/project/target/idea-classes"/>
+  <property name="gomoku2-build.testoutput.dir" value="${module.gomoku2-build.basedir}/project/target/idea-test-classes"/>
+  
+  <path id="gomoku2-build.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="gomoku2-build.module.production.classpath">
+    <path refid="${module.jdk.classpath.gomoku2-build}"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/jansi.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/jline.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/scala-compiler.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/scala-library.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/scala-reflect.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/actions-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/api-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/apply-macro-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/cache-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/classfile-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/classpath-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/collections-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/command-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compile-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compiler-integration-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compiler-interface-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compiler-ivy-integration-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/completion-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/control-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/cross-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/incremental-compiler-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/io-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/ivy-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/ivy-2.3.0-sbt-48dd0744422128446aee9ac31aa356ee203cc9f4.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/jawn-parser_2.10-0.6.0.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/jline-2.14.4.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/jsch-0.1.50.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/json4s-ast_2.10-3.2.10.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/json4s-core_2.10-3.2.10.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/json4s-support_2.10-0.6.0.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/launcher-interface-1.0.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/logging-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/logic-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/main-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/main-settings-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/paranamer-2.6.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/persist-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/process-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/quasiquotes_2.10-2.0.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/relation-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/run-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/sbinary_2.10-0.4.2.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/sbt-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/scala-pickling_2.10-0.10.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/scala-reflect-2.10.6.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/serialization_2.10-0.1.2.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/task-system-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/tasks-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/template-resolver-0.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/test-agent-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/test-interface-1.0.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/testing-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/tracking-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/xsbti/interface-0.13.16.jar"/>
+  </path>
+  
+  <path id="gomoku2-build.runtime.production.module.classpath">
+    <pathelement location="${gomoku2-build.output.dir}"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/jansi.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/jline.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/scala-compiler.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/scala-library.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/scala-reflect.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/actions-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/api-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/apply-macro-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/cache-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/classfile-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/classpath-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/collections-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/command-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compile-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compiler-integration-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compiler-interface-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compiler-ivy-integration-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/completion-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/control-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/cross-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/incremental-compiler-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/io-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/ivy-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/ivy-2.3.0-sbt-48dd0744422128446aee9ac31aa356ee203cc9f4.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/jawn-parser_2.10-0.6.0.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/jline-2.14.4.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/jsch-0.1.50.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/json4s-ast_2.10-3.2.10.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/json4s-core_2.10-3.2.10.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/json4s-support_2.10-0.6.0.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/launcher-interface-1.0.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/logging-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/logic-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/main-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/main-settings-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/paranamer-2.6.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/persist-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/process-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/quasiquotes_2.10-2.0.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/relation-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/run-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/sbinary_2.10-0.4.2.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/sbt-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/scala-pickling_2.10-0.10.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/scala-reflect-2.10.6.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/serialization_2.10-0.1.2.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/task-system-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/tasks-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/template-resolver-0.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/test-agent-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/test-interface-1.0.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/testing-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/tracking-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/xsbti/interface-0.13.16.jar"/>
+  </path>
+  
+  <path id="gomoku2-build.module.classpath">
+    <path refid="${module.jdk.classpath.gomoku2-build}"/>
+    <pathelement location="${gomoku2-build.output.dir}"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/jansi.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/jline.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/scala-compiler.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/scala-library.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/scala-reflect.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/actions-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/api-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/apply-macro-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/cache-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/classfile-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/classpath-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/collections-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/command-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compile-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compiler-integration-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compiler-interface-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compiler-ivy-integration-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/completion-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/control-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/cross-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/incremental-compiler-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/io-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/ivy-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/ivy-2.3.0-sbt-48dd0744422128446aee9ac31aa356ee203cc9f4.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/jawn-parser_2.10-0.6.0.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/jline-2.14.4.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/jsch-0.1.50.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/json4s-ast_2.10-3.2.10.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/json4s-core_2.10-3.2.10.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/json4s-support_2.10-0.6.0.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/launcher-interface-1.0.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/logging-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/logic-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/main-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/main-settings-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/paranamer-2.6.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/persist-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/process-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/quasiquotes_2.10-2.0.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/relation-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/run-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/sbinary_2.10-0.4.2.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/sbt-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/scala-pickling_2.10-0.10.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/scala-reflect-2.10.6.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/serialization_2.10-0.1.2.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/task-system-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/tasks-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/template-resolver-0.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/test-agent-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/test-interface-1.0.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/testing-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/tracking-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/xsbti/interface-0.13.16.jar"/>
+  </path>
+  
+  <path id="gomoku2-build.runtime.module.classpath">
+    <pathelement location="${gomoku2-build.testoutput.dir}"/>
+    <pathelement location="${gomoku2-build.output.dir}"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/jansi.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/jline.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/scala-compiler.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/scala-library.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/lib/scala-reflect.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/actions-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/api-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/apply-macro-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/cache-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/classfile-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/classpath-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/collections-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/command-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compile-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compiler-integration-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compiler-interface-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/compiler-ivy-integration-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/completion-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/control-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/cross-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/incremental-compiler-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/io-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/ivy-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/ivy-2.3.0-sbt-48dd0744422128446aee9ac31aa356ee203cc9f4.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/jawn-parser_2.10-0.6.0.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/jline-2.14.4.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/jsch-0.1.50.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/json4s-ast_2.10-3.2.10.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/json4s-core_2.10-3.2.10.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/json4s-support_2.10-0.6.0.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/launcher-interface-1.0.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/logging-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/logic-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/main-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/main-settings-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/paranamer-2.6.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/persist-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/process-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/quasiquotes_2.10-2.0.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/relation-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/run-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/sbinary_2.10-0.4.2.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/sbt-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/scala-pickling_2.10-0.10.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/scala-reflect-2.10.6.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/serialization_2.10-0.1.2.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/task-system-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/tasks-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/template-resolver-0.1.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/test-agent-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/test-interface-1.0.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/testing-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/tracking-0.13.16.jar"/>
+    <pathelement location="${basedir}/../../.sbt/boot/scala-2.10.6/org.scala-sbt/sbt/0.13.16/xsbti/interface-0.13.16.jar"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.gomoku2-build">
+    <patternset refid="ignored.files"/>
+    <exclude name="target/**"/>
+    <exclude name="target/streams/**"/>
+    <exclude name="target/streams/$global/**"/>
+    <exclude name="target/streams/$global/ivySbt/**"/>
+    <exclude name="target/streams/$global/ivySbt/$global/**"/>
+    <exclude name="target/streams/$global/ivySbt/$global/streams/**"/>
+    <exclude name="target/streams/$global/update/**"/>
+    <exclude name="target/streams/$global/update/$global/**"/>
+    <exclude name="target/streams/$global/update/$global/streams/**"/>
+    <exclude name="target/streams/$global/update/$global/streams/update_cache_2.10/**"/>
+    <exclude name="target/streams/$global/$global/**"/>
+    <exclude name="target/streams/$global/$global/$global/**"/>
+    <exclude name="target/streams/$global/$global/$global/streams/**"/>
+    <exclude name="target/streams/$global/ivyConfiguration/**"/>
+    <exclude name="target/streams/$global/ivyConfiguration/$global/**"/>
+    <exclude name="target/streams/$global/ivyConfiguration/$global/streams/**"/>
+    <exclude name="target/streams/$global/projectDescriptors/**"/>
+    <exclude name="target/streams/$global/projectDescriptors/$global/**"/>
+    <exclude name="target/streams/$global/projectDescriptors/$global/streams/**"/>
+    <exclude name="target/streams/$global/dependencyPositions/**"/>
+    <exclude name="target/streams/$global/dependencyPositions/$global/**"/>
+    <exclude name="target/streams/$global/dependencyPositions/$global/streams/**"/>
+    <exclude name="target/streams/$global/dependencyPositions/$global/streams/update_cache_2.10/**"/>
+    <exclude name="target/streams/$global/updateSbtClassifiers/**"/>
+    <exclude name="target/streams/$global/updateSbtClassifiers/$global/**"/>
+    <exclude name="target/streams/$global/updateSbtClassifiers/$global/streams/**"/>
+    <exclude name="target/streams/compile/**"/>
+    <exclude name="target/streams/compile/$global/**"/>
+    <exclude name="target/streams/compile/$global/$global/**"/>
+    <exclude name="target/streams/compile/$global/$global/discoveredMainClasses/**"/>
+    <exclude name="target/streams/compile/compile/**"/>
+    <exclude name="target/streams/compile/compile/$global/**"/>
+    <exclude name="target/streams/compile/compile/$global/streams/**"/>
+    <exclude name="target/streams/compile/copyResources/**"/>
+    <exclude name="target/streams/compile/copyResources/$global/**"/>
+    <exclude name="target/streams/compile/copyResources/$global/streams/**"/>
+    <exclude name="target/streams/compile/unmanagedJars/**"/>
+    <exclude name="target/streams/compile/unmanagedJars/$global/**"/>
+    <exclude name="target/streams/compile/unmanagedJars/$global/streams/**"/>
+    <exclude name="target/streams/compile/incCompileSetup/**"/>
+    <exclude name="target/streams/compile/incCompileSetup/$global/**"/>
+    <exclude name="target/streams/compile/incCompileSetup/$global/streams/**"/>
+    <exclude name="target/streams/compile/exportedProducts/**"/>
+    <exclude name="target/streams/compile/exportedProducts/$global/**"/>
+    <exclude name="target/streams/compile/exportedProducts/$global/streams/**"/>
+    <exclude name="target/streams/compile/managedClasspath/**"/>
+    <exclude name="target/streams/compile/managedClasspath/$global/**"/>
+    <exclude name="target/streams/compile/managedClasspath/$global/streams/**"/>
+    <exclude name="target/streams/compile/compileIncremental/**"/>
+    <exclude name="target/streams/compile/compileIncremental/$global/**"/>
+    <exclude name="target/streams/compile/compileIncremental/$global/streams/**"/>
+    <exclude name="target/streams/compile/unmanagedClasspath/**"/>
+    <exclude name="target/streams/compile/unmanagedClasspath/$global/**"/>
+    <exclude name="target/streams/compile/unmanagedClasspath/$global/streams/**"/>
+    <exclude name="target/streams/compile/dependencyClasspath/**"/>
+    <exclude name="target/streams/compile/dependencyClasspath/$global/**"/>
+    <exclude name="target/streams/compile/dependencyClasspath/$global/streams/**"/>
+    <exclude name="target/streams/compile/externalDependencyClasspath/**"/>
+    <exclude name="target/streams/compile/externalDependencyClasspath/$global/**"/>
+    <exclude name="target/streams/compile/externalDependencyClasspath/$global/streams/**"/>
+    <exclude name="target/streams/compile/internalDependencyClasspath/**"/>
+    <exclude name="target/streams/compile/internalDependencyClasspath/$global/**"/>
+    <exclude name="target/streams/compile/internalDependencyClasspath/$global/streams/**"/>
+    <exclude name="target/streams/runtime/**"/>
+    <exclude name="target/streams/runtime/fullClasspath/**"/>
+    <exclude name="target/streams/runtime/fullClasspath/$global/**"/>
+    <exclude name="target/streams/runtime/fullClasspath/$global/streams/**"/>
+    <exclude name="target/streams/runtime/unmanagedJars/**"/>
+    <exclude name="target/streams/runtime/unmanagedJars/$global/**"/>
+    <exclude name="target/streams/runtime/unmanagedJars/$global/streams/**"/>
+    <exclude name="target/streams/runtime/exportedProducts/**"/>
+    <exclude name="target/streams/runtime/exportedProducts/$global/**"/>
+    <exclude name="target/streams/runtime/exportedProducts/$global/streams/**"/>
+    <exclude name="target/streams/runtime/managedClasspath/**"/>
+    <exclude name="target/streams/runtime/managedClasspath/$global/**"/>
+    <exclude name="target/streams/runtime/managedClasspath/$global/streams/**"/>
+    <exclude name="target/streams/runtime/unmanagedClasspath/**"/>
+    <exclude name="target/streams/runtime/unmanagedClasspath/$global/**"/>
+    <exclude name="target/streams/runtime/unmanagedClasspath/$global/streams/**"/>
+    <exclude name="target/streams/runtime/dependencyClasspath/**"/>
+    <exclude name="target/streams/runtime/dependencyClasspath/$global/**"/>
+    <exclude name="target/streams/runtime/dependencyClasspath/$global/streams/**"/>
+    <exclude name="target/streams/runtime/externalDependencyClasspath/**"/>
+    <exclude name="target/streams/runtime/externalDependencyClasspath/$global/**"/>
+    <exclude name="target/streams/runtime/externalDependencyClasspath/$global/streams/**"/>
+    <exclude name="target/streams/runtime/internalDependencyClasspath/**"/>
+    <exclude name="target/streams/runtime/internalDependencyClasspath/$global/**"/>
+    <exclude name="target/streams/runtime/internalDependencyClasspath/$global/streams/**"/>
+    <exclude name="target/scala-2.10/**"/>
+    <exclude name="target/scala-2.10/sbt-0.13/**"/>
+    <exclude name="target/scala-2.10/sbt-0.13/resolution-cache/**"/>
+    <exclude name="target/scala-2.10/sbt-0.13/resolution-cache/default/**"/>
+    <exclude name="target/scala-2.10/sbt-0.13/resolution-cache/default/gomoku-build/**"/>
+    <exclude name="target/scala-2.10/sbt-0.13/resolution-cache/default/gomoku-build/scala_2.10/**"/>
+    <exclude name="target/scala-2.10/sbt-0.13/resolution-cache/default/gomoku-build/scala_2.10/sbt_0.13/**"/>
+    <exclude name="target/scala-2.10/sbt-0.13/resolution-cache/default/gomoku-build/scala_2.10/sbt_0.13/0.1-SNAPSHOT/**"/>
+    <exclude name="target/scala-2.10/sbt-0.13/resolution-cache/default/gomoku2-build/**"/>
+    <exclude name="target/scala-2.10/sbt-0.13/resolution-cache/default/gomoku2-build/scala_2.10/**"/>
+    <exclude name="target/scala-2.10/sbt-0.13/resolution-cache/default/gomoku2-build/scala_2.10/sbt_0.13/**"/>
+    <exclude name="target/scala-2.10/sbt-0.13/resolution-cache/default/gomoku2-build/scala_2.10/sbt_0.13/0.1-SNAPSHOT/**"/>
+    <exclude name="target/scala-2.10/sbt-0.13/resolution-cache/reports/**"/>
+    <exclude name="target/config-classes/**"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.gomoku2-build">
+    <patternset refid="excluded.from.module.gomoku2-build"/>
+  </patternset>
+  
+  <path id="gomoku2-build.module.sourcepath">
+    <dirset dir="${module.gomoku2-build.basedir}">
+      <include name="project"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.gomoku2-build" depends="compile.module.gomoku2-build.production,compile.module.gomoku2-build.tests" description="Compile module gomoku2-build"/>
+  
+  <target name="compile.module.gomoku2-build.production" depends="register.custom.compilers" description="Compile module gomoku2-build; production classes">
+    <mkdir dir="${gomoku2-build.output.dir}"/>
+    <javac2 destdir="${gomoku2-build.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.gomoku2-build}/javac">
+      <compilerarg line="${compiler.args.gomoku2-build}"/>
+      <bootclasspath refid="gomoku2-build.module.bootclasspath"/>
+      <classpath refid="gomoku2-build.module.production.classpath"/>
+      <src refid="gomoku2-build.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.gomoku2-build"/>
+    </javac2>
+    
+    <copy todir="${gomoku2-build.output.dir}">
+      <fileset dir="${module.gomoku2-build.basedir}/project">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.gomoku2-build.tests" depends="register.custom.compilers,compile.module.gomoku2-build.production" description="compile module gomoku2-build; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.gomoku2-build" description="cleanup module">
+    <delete dir="${gomoku2-build.output.dir}"/>
+    <delete dir="${gomoku2-build.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.gomoku2, clean.module.gomoku2-build" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.gomoku2, compile.module.gomoku2-build" description="build all modules"/>
+  
+  <target name="all" depends="build.modules" description="build all"/>
+</project>
