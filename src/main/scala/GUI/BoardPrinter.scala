@@ -9,8 +9,8 @@ import Game.{Board, Pos}
 
 import scala.swing.event.{Event, MouseClicked, MouseMoved}
 
-case class cursorMoved(pos: Pos) extends Event
-case class posSelected(pos: Pos,board: Board) extends Event
+case class CursorMoved(pos: Pos) extends Event
+case class PosSelected(pos: Pos,board: Board) extends Event
 
 class BoardPrinter(board: Board) extends Component {
   preferredSize = new Dimension(320,320)
@@ -167,11 +167,11 @@ class BoardPrinter(board: Board) extends Component {
 
   def mouseClick(x: Int, y: Int): Unit = {
     if(isInBoard(x,y) && board.possibleMoves.contains(pointToPos(x,y)))
-      publish(posSelected(pointToPos(x,y),board))
+      publish(PosSelected(pointToPos(x,y),board))
   }
 
   def mouseMove(x: Int, y: Int): Unit = {
-    if (isInBoard(x,y)) publish(cursorMoved(pointToPos(x,y)))
+    if (isInBoard(x,y)) publish(CursorMoved(pointToPos(x,y)))
   }
 
   listenTo(mouse.clicks)

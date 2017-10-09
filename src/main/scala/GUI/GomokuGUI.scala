@@ -20,6 +20,8 @@ class UI extends MainFrame with GameDef  {
   minimumSize = new java.awt.Dimension(500,350)
   title = "Gomoku"
 
+  val settings = new Settings
+
   val futureBoard: Label = new Label {
     icon = new ImageIcon(getClass.getClassLoader.getResource("mem.jpg").getPath)
     border=Swing.EtchedBorder(Swing.Lowered)
@@ -82,6 +84,9 @@ class UI extends MainFrame with GameDef  {
     add(downBar.bar, BorderPanel.Position.South)
     add(new ScrollPane(rightPanel.panel){verticalScrollBarPolicy = ScrollPane.BarPolicy.Always}, BorderPanel.Position.East)
 
+    subscribe(settings.reactions)
+    listenTo(settings)
+
     listenTo(rightPanel.gameTypeComboBox.selection)
     listenTo(rightPanel.numberOfPlayersComboBox.selection)
     listenTo(rightPanel.numberOfAIComboBox.selection)
@@ -92,23 +97,39 @@ class UI extends MainFrame with GameDef  {
       case SelectionChanged(rightPanel.gameTypeComboBox) => rightPanel.modePrinter()
       case SelectionChanged(rightPanel.numberOfPlayersComboBox) => rightPanel.refreshPlayersList()
       case SelectionChanged(rightPanel.numberOfAIComboBox) => rightPanel.refreshAIList()
-      case cursorMoved(pos) => downBar.printPos(pos)
-      case posSelected(pos,board) => makeMove(pos, board)
+      case CursorMoved(pos) => downBar.printPos(pos)
+      case PosSelected(pos,board) => makeMove(pos, board)
       case ButtonClicked(_) => startGame()
       case aiMadeMove(board,move) => makeMove(move,board)
-
+      case GameInfoChanged(boardSize,sequenceToWin) => println(boardSize + "   " + sequenceToWin)
     }
   }
 
   menuBar = new MenuBar{
-    contents += new Menu("File")
+    contents += new Menu("File") {
+      contents += new MenuItem(Action("Load game") {
+        ???
+      })
+      contents += new MenuItem(Action("Save game") {
+        ???
+      })
+      contents += new MenuItem(Action("Show game history") {
+        ???
+      })
+    }
     contents += new Menu("Settings") {
-      contents += new MenuItem(Action("Game Settings") {
-        val settings = new Settings
+      contents += new MenuItem(Action("Change settings") {
         settings.visible = true
       })
     }
-    contents += new Menu("Help")
+    contents += new Menu("Help") {
+      contents += new MenuItem(Action("How to play") {
+        ???
+      })
+      contents += new MenuItem(Action("Github") {
+        ???
+      })
+    }
   }
 
 
