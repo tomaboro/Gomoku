@@ -4,7 +4,7 @@ package Game
   * class representing game board
   * @param boardStr String containing current board situation
   */
-case class Board(boardStr: String,sequenceToWin: Int, players: List[Player]){
+case class Board(boardStr: String,sequenceToWin: Int, players: Array[Player], currPlayerIndex: Int){
   require(players.map(x => boardStr.count(_ == x.counter)).sum + boardStr.count(_ == ' ') == boardStr.length,
     "Board shouldn't contain elements other than players counters and ' '")
 
@@ -40,15 +40,17 @@ case class Board(boardStr: String,sequenceToWin: Int, players: List[Player]){
     */
   def makeMove(pos: Pos): Board = {
     require(isLegal(pos) && isEmpty(pos),"Illegal move position")
+    val nCurrPlayer = if(currPlayerIndex+1 == players.length) 0 else currPlayerIndex+1
     val computed: Int = pos.indexInBoard(this)
     Board(boardStr.take(computed) + currentPlayer.counter + boardStr.drop(computed+1),
       sequenceToWin,
-      players.tail ++ players.take(1))
+      players,
+      nCurrPlayer)
   }
 
-  lazy val previousPlayer = players.last
-  lazy val currentPlayer = players.head
-  lazy val nextPlayer = players(1)
+  lazy val previousPlayer = if(currPlayerIndex-1 < 0) players.last else players(currPlayerIndex-1)
+  lazy val currentPlayer = players(currPlayerIndex)
+  lazy val nextPlayer = if(currPlayerIndex+1 == players.length) players.head else players(currPlayerIndex+1)
 
 
   /**
@@ -96,5 +98,5 @@ object Board {
     *
     * @return board string
     */
-  def initBoard(size: Int, sequenceToWin: Int, players: List[Player]): Board = Board((0 until (size * size)).map(_ => " ").mkString, sequenceToWin, players)
+  def initBoard(size: Int, sequenceToWin: Int, players: Array[Player]): Board = Board((0 until (size * size)).map(_ => " ").mkString, sequenceToWin, players, 0)
 }

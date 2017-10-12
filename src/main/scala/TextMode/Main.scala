@@ -4,8 +4,9 @@ import Game._
 
 object Main extends App{
 
-  GameLoop.PVPGameLoop
+  //GameLoop.PVPGameLoop
 
+  println("Tomek ma kota".filter(_ != ' '))
 }
 
 

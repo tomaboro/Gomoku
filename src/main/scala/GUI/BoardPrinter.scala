@@ -5,7 +5,7 @@ import java.awt.{Color, Dimension}
 import java.awt.geom.Line2D
 import javax.swing.ImageIcon
 
-import Game.{Board, Pos}
+import Game.{Board, Player, Pos}
 
 import scala.swing.event.{Event, MouseClicked, MouseMoved}
 

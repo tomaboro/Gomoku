@@ -4,7 +4,7 @@ import Game._
 
 object RandomAI extends GameDef {
 
-  type GameHistory = List[(Pos,Player)]
+  type GameHistory = List[Pos]
 
   /**
     * AI making moves in complete random way
@@ -16,7 +16,6 @@ object RandomAI extends GameDef {
     val randomizer = scala.util.Random
     val possiblities = board.possibleMoves.toArray
 
-    Thread.sleep(2000)
     possiblities(randomizer.nextInt(possiblities.length))
   }
 }

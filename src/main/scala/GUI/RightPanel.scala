@@ -103,7 +103,7 @@ class RightPanel {
     val ais =
       aisPromptArray.zip(aisCountersArray).
         take(numberOfAIComboBox.selection.item).
-        map{case (name,counter) => Player(name.text,counter.selection.item)}.
+        map{case (name,counter) => Player(name.text.filter(_ != ' '),counter.selection.item)}.
         zip(aisTypesArray.map(_.selection.item))
 
 

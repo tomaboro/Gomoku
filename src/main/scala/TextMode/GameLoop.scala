@@ -7,7 +7,7 @@ object GameLoop extends GameDef {
   type GameHistory = List[(Pos,Player)]
   type AI = (Board,GameHistory) => Pos
 
-  val playersTmp = List(Player("Tomek",'X'),Player("Iza",'O'))
+  val playersTmp = Array(Player("Tomek",'X'),Player("Iza",'O'))
 
   /**
     * Prints prompt and read player move from keyboard
