@@ -10,7 +10,7 @@ trait GameDef {
     * It only checks if player move creates winning sequence.
     * As a result you need to run this function before computing every move
     *
-    * @param board  board before or after player move
+    * @param board  board after player move
     * @param move   position where player wants to place his counter
     * @return true if player wins, otherwise false
     */

@@ -2,9 +2,12 @@ package GUI
 
 import Game.Pos
 
-import scala.swing.{Label, Swing}
+import scala.swing.{BorderPanel, Label, MainFrame, Swing}
 
-class DownBar {
+//TODO: Rewrite it!
+class DownBar(parent: MainFrame) {
+
+  var playerStr: String = ""
 
   val bar = new Label {
     text = "Last moves Here"
@@ -12,11 +15,11 @@ class DownBar {
   }
 
   def updateBar(text: String): Unit = {
-    bar.text = text
+    bar.text = playerStr + ":    " + text
   }
 
   def printPos(pos: Pos): Unit = {
-    bar.text = pos.toString
+    bar.text = playerStr + ":    " + pos.toString
   }
 
   def clear: Unit = {

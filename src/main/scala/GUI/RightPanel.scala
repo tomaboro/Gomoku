@@ -2,11 +2,12 @@ package GUI
 
 import javax.swing.ImageIcon
 
+import ArtificialIntelligence.AIInfo
 import Game.Player
 
-import scala.swing.{BorderPanel, BoxPanel, Button, ComboBox, FlowPanel, Label, Orientation, Swing, TextField}
+import scala.swing._
 
-class RightPanel {
+class RightPanel(parent: MainFrame) {
 
   val gameTypeComboBox = new ComboBox(List("Player vs Player", "Player vs Computer", "Computer vs Computer"))
   val numberOfPlayersComboBox = new ComboBox(2 to 5)
@@ -14,11 +15,11 @@ class RightPanel {
 
   val playersPromptArray: Array[Label] = (1 to 5).map(index => new Label("Player " + index)).toArray
   val playersNamesArray: Array[TextField] = (1 to 5).map(_ => new TextField()).toArray
-  val playersCountersArray: Array[ComboBox[Char]] = (1 to 5).map(_ => new ComboBox(Array('X','O','C','N','B'))).toArray
+  val playersCountersArray: Array[ComboBox[Char]] = (1 to 5).map(_ => new ComboBox(Array('R','B','Y','G','P'))).toArray
 
   val aisPromptArray: Array[Label] = (1 to 5).map(index => new Label("AI " + index)).toArray
-  val aisTypesArray: Array[ComboBox[String]] = (1 to 5).map(_ => new ComboBox(List("Random","Naive"))).toArray
-  val aisCountersArray: Array[ComboBox[Char]] = (1 to 5).map(_ => new ComboBox(Array('X','O','C','N','B'))).toArray
+  val aisTypesArray: Array[ComboBox[String]] = (1 to 5).map(_ => new ComboBox(AIInfo.names.toList)).toArray
+  val aisCountersArray: Array[ComboBox[Char]] = (1 to 5).map(_ => new ComboBox(Array('R','B','Y','G','P'))).toArray
 
   val playersList: List[BoxPanel] = (0 to 4).map(index => new BoxPanel(Orientation.Vertical) {
     visible = false
@@ -62,14 +63,14 @@ class RightPanel {
 
   aisList.head.visible = true
 
-  val gameType = new BoxPanel(Orientation.Horizontal){
+  val gameType: BoxPanel = new BoxPanel(Orientation.Horizontal){
     contents += new Label("Type: ")
     contents += Swing.HStrut(10)
     contents += gameTypeComboBox
   }
 
 
-  val playersBox = new BoxPanel(Orientation.Vertical) {
+  val playersBox: BoxPanel = new BoxPanel(Orientation.Vertical) {
     border = Swing.EtchedBorder(Swing.Lowered)
 
     contents += new BoxPanel(Orientation.Horizontal) {
@@ -77,11 +78,11 @@ class RightPanel {
       contents += Swing.HStrut(10)
       contents += numberOfPlayersComboBox
     }
-    playersList.foreach(elem => contents += elem)
+    playersList.foreach(contents += _)
   }
 
 
-  val aisBox = new BoxPanel(Orientation.Vertical) {
+  val aisBox: BoxPanel = new BoxPanel(Orientation.Vertical) {
     visible = false
     border = Swing.EtchedBorder(Swing.Lowered)
 
@@ -119,7 +120,7 @@ class RightPanel {
 
   val startButton = new Button("Start")
 
-  val panel = new BorderPanel() {
+  val panel: BorderPanel = new BorderPanel() {
     add(new BoxPanel(Orientation.Vertical) {
       contents += gameType
       contents += playersBox
@@ -136,16 +137,17 @@ class RightPanel {
         playersBox.visible = true
 
         numberOfPlayersComboBox.peer.setModel(ComboBox.newConstantModel(2 to 5))
-        playersList.take(2).foreach(_.visible)
+        playersList.take(2).foreach(_.visible = true)
+        playersList.drop(2).foreach(_.visible = false)
       case 1 => //PVC
         aisBox.visible = true
         playersBox.visible = true
 
-        numberOfPlayersComboBox.peer.setModel(ComboBox.newConstantModel(1 to 5))
+        numberOfPlayersComboBox.peer.setModel(ComboBox.newConstantModel(1 to 3))
         playersList.head.visible
         playersList.tail.foreach(_.visible = false)
 
-        numberOfAIComboBox.peer.setModel(ComboBox.newConstantModel(1 to 5))
+        numberOfAIComboBox.peer.setModel(ComboBox.newConstantModel(1 to 2))
         aisList.head.visible
         aisList.tail.foreach(_.visible = false)
       case 2 => // CVC
@@ -154,6 +156,7 @@ class RightPanel {
 
         numberOfAIComboBox.peer.setModel(ComboBox.newConstantModel(2 to 5))
         aisList.take(2).foreach(_.visible = true)
+        aisList.drop(2).foreach(_.visible = false)
     }
   }
 

@@ -1,13 +1,14 @@
 package TextMode
 
+import ArtificialIntelligence.GomokuAI
 import Game.{Board, GameDef, Player, Pos}
 
 object GameLoop extends GameDef {
 
-  type GameHistory = List[(Pos,Player)]
-  type AI = (Board,GameHistory) => Pos
+  var boardSize = 17
+  var sequenceToWin = 5
 
-  val playersTmp = Array(Player("Tomek",'X'),Player("Iza",'O'))
+  type GameHistory = List[Pos]
 
   /**
     * Prints prompt and read player move from keyboard
@@ -28,7 +29,7 @@ object GameLoop extends GameDef {
   }
 
 
-  def PVPGameLoop: Unit = {
+  def PVPGameLoop(players: List[Player]): Unit = {
     def looper(board: Board): Unit = {
       if (isDraw(board)) println("REMIS")
       else {
@@ -37,19 +38,19 @@ object GameLoop extends GameDef {
 
         println(nBoard)
 
-        if (isWinning(board, nxtMove)) println("GRATULACJE " + board.currentPlayer.name + " !!!")
+        if (isWinning(nBoard, nxtMove)) println("GRATULACJE " + board.currentPlayer.name + " !!!")
         else if (isDraw(board)) println("REMIS")
         else looper(board.makeMove(nxtMove))
       }
     }
 
-    val clearBoard = Board.initBoard(17,5,playersTmp)
+    val clearBoard = Board.initBoard(boardSize,sequenceToWin,players.toArray)
     println(clearBoard)
     looper(clearBoard)
   }
 
 
-  def PVCGameLoop(players: List[Player], computers: Map[Player,AI]): Unit = {
+  def PVCGameLoop(players: List[Player], ais: List[Player], aisMap: Map[Player,GomokuAI]): Unit = {
 
     def looper(board: Board, gameHistory: GameHistory): Unit = {
       if(players.contains(board.currentPlayer)) {
@@ -60,11 +61,11 @@ object GameLoop extends GameDef {
 
         if (isWinning(board, nxtMove)) println("GRATULACJE " + board.currentPlayer.name + " !!!")
         else if (isDraw(nBoard)) println("REMIS")
-        else looper(nBoard,(nxtMove,board.currentPlayer) :: gameHistory)
+        else looper(nBoard,nxtMove :: gameHistory)
       }
       else {
-        val ai: AI = computers(board.currentPlayer)
-        val computerMove: Pos = ai(board,gameHistory)
+        val ai: GomokuAI = aisMap(board.currentPlayer)
+        val computerMove: Pos = ai.makeMove(board,gameHistory)
         val nBoard: Board = board.makeMove(computerMove)
 
         println(board.currentPlayer + ": " + computerMove)
@@ -72,49 +73,22 @@ object GameLoop extends GameDef {
 
         if (isWinning(board, computerMove)) println("GRATULACJE " + board.currentPlayer.name + " !!!")
         else if (isDraw(nBoard)) println("REMIS")
-        else looper(nBoard,(computerMove,board.currentPlayer) :: gameHistory)
+        else looper(nBoard,computerMove :: gameHistory)
       }
     }
 
-    /*def looper(board: Board, player: Player, history: GameHistory): Unit = {
-      if (isDraw(board)) println("REMIS")
-      else {
-
-        val playerMove: Pos = playerMove(board)
-        val nBoard: Board = board.makeMove(playerMove)
-
-        println(nBoard)
-
-        if (isWinning(board, nxtPlayerMove)) println("GRATULACJE " + player.name + " !!!")
-        else if (isDraw(nBoard)) println("REMIS")
-        else {
-
-          val computerPlayer: Player = nextPlayer
-          val nHistory: GameHistory = (player, nxtPlayerMove) :: history
-          val nxtComputerMove: Pos = ai(board, player, history)
-          val nnBoard: Board = nBoard.makeMove(nxtComputerMove, computerPlayer)
-
-          println(computerPlayer.name+ ": " +nxtComputerMove)
-          println(nnBoard)
-
-          if (isWinning(nBoard, nxtComputerMove, computerPlayer)) println("GRATULACJE " + computerPlayer.name + " !!!")
-          else looper(nnBoard, player, (computerPlayer, nxtComputerMove) :: nHistory)
-        }
-      }
-    }*/
-
-    val clearBoard = Board.initBoard(17,5,playersTmp)
+    val clearBoard = Board.initBoard(boardSize,sequenceToWin,(players++ais).toArray)
     println(clearBoard)
     looper(clearBoard,List())
   }
 
 
-  def CVCGameLoop(computers: Map[Player,AI]): Unit = {
+  def CVCGameLoop(ais: List[Player], aisMap: Map[Player,GomokuAI]): Unit = {
 
     def looper(board: Board, gameHistory: GameHistory): Unit = {
 
-      val ai: AI = computers(board.currentPlayer)
-      val computerMove: Pos = ai(board,gameHistory)
+      val ai: GomokuAI = aisMap(board.currentPlayer)
+      val computerMove: Pos = ai.makeMove(board,gameHistory)
       val nBoard: Board = board.makeMove(computerMove)
 
       println(board.currentPlayer + ": " + computerMove)
@@ -122,39 +96,11 @@ object GameLoop extends GameDef {
 
       if (isWinning(board, computerMove)) println("GRATULACJE " + board.currentPlayer.name + " !!!")
       else if (isDraw(nBoard)) println("REMIS")
-      else looper(nBoard,(computerMove,board.currentPlayer) :: gameHistory)
+      else looper(nBoard,computerMove :: gameHistory)
 
     }
 
-    /*def looper(board: Board, player: Player, history: GameHistory): Unit = {
-      if (isDraw(board)) println("REMIS")
-      else {
-
-        val nxtPlayerMove: Pos = ai1(board, player, history)
-        val nBoard: Board = board.makeMove(nxtPlayerMove, player)
-
-        println(player.name+ ": " +nxtPlayerMove)
-        println(nBoard)
-
-        if (isWinning(board, nxtPlayerMove, player)) println("GRATULACJE " + player.name + " !!!")
-        else if (isDraw(nBoard)) println("REMIS")
-        else {
-
-          val computerPlayer: Player = player.nextPlayer
-          val nHistory: GameHistory = (player, nxtPlayerMove) :: history
-          val nxtComputerMove: Pos = ai2(nBoard, player, history)
-          val nnBoard: Board = nBoard.makeMove(nxtComputerMove, computerPlayer)
-
-          println(computerPlayer.name+ ": " +nxtComputerMove)
-          println(nnBoard)
-
-          if (isWinning(nBoard, nxtComputerMove, computerPlayer)) println("GRATULACJE " + computerPlayer.name + " !!!")
-          else looper(nnBoard, player, (computerPlayer, nxtComputerMove) :: nHistory)
-        }
-      }
-    }*/
-
-    val clearBoard = Board.initBoard(17,5,playersTmp)
+    val clearBoard = Board.initBoard(boardSize,sequenceToWin,ais.toArray)
     println(clearBoard)
     looper(clearBoard,List())
   }

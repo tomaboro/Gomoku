@@ -2,7 +2,7 @@ package GUI
 
 import scala.swing._
 import java.awt.{Color, Dimension}
-import java.awt.geom.Line2D
+import java.awt.geom.{Ellipse2D, Line2D}
 import javax.swing.ImageIcon
 
 import Game.{Board, Player, Pos}
@@ -16,102 +16,6 @@ class BoardPrinter(board: Board) extends Component {
   preferredSize = new Dimension(320,320)
 
   def getBoard: Board = board
-
-  val futureBoard = new Label {
-    icon = new ImageIcon(getClass.getClassLoader.getResource("mem.jpg").getPath)
-    border=Swing.EtchedBorder(Swing.Lowered)
-  }
-
-  val actionsHistory = new Label {
-    text = "Last moves Here"
-    border=Swing.EtchedBorder(Swing.Lowered)
-  }
-
-
-  val gameTypeComboBox = new ComboBox(List("Player vs Player", "Player vs Computer", "Computer vs Computer"))
-  val numberOfPlayersComboBox = new ComboBox(2 to 5)
-  val numberOfAIComboBox = new ComboBox(2 to 5)
-
-  val playersPromptArray: Array[Label] = (1 to 5).map(index => new Label("Player " + index)).toArray
-  val playersNamesArray: Array[TextField] = (1 to 5).map(_ => new TextField()).toArray
-  val playersCountersArray: Array[ComboBox[Char]] = (1 to 5).map(_ => new ComboBox(Array('X','O','C','N','B'))).toArray
-
-  val aisPromptArray: Array[Label] = (1 to 5).map(index => new Label("AI " + index)).toArray
-  val aisTypesArray: Array[ComboBox[String]] = (1 to 5).map(_ => new ComboBox(List("Random","Naive"))).toArray
-  val aisCountersArray: Array[ComboBox[Char]] = (1 to 5).map(_ => new ComboBox(Array('X','O','C','N','B'))).toArray
-
-  val playersList: List[BoxPanel] = (0 to 4).map(index => new BoxPanel(Orientation.Vertical) {
-    visible = false
-
-    contents += Swing.VStrut(5)
-    contents += playersPromptArray(index)
-    contents += new BoxPanel(Orientation.Horizontal) {
-      contents += new Label("Name: ")
-      contents += Swing.HStrut(10)
-      contents += playersNamesArray(index)
-    }
-    contents += new BoxPanel(Orientation.Horizontal) {
-      contents += new Label("Counter: ")
-      contents += Swing.HStrut(10)
-      contents += playersCountersArray(index)
-    }
-    contents += Swing.VStrut(5)
-  }
-  ).toList
-
-  playersList.take(2).foreach(_.visible = true)
-
-  val aisList: List[BoxPanel] = (0 to 4).map(index => new BoxPanel(Orientation.Vertical) {
-    visible = false
-
-    contents += Swing.VStrut(5)
-    contents += aisPromptArray(index)
-    contents += new BoxPanel(Orientation.Horizontal) {
-      contents += new Label("Algorithm: ")
-      contents += Swing.HStrut(10)
-      contents += aisTypesArray(index)
-    }
-    contents += new BoxPanel(Orientation.Horizontal) {
-      contents += new Label("Counter: ")
-      contents += Swing.HStrut(10)
-      contents += aisCountersArray(index)
-    }
-    contents += Swing.VStrut(5)
-  }
-  ).toList
-
-  aisList.head.visible = true
-
-  val gameType = new BoxPanel(Orientation.Horizontal){
-    contents += new Label("Type: ")
-    contents += Swing.HStrut(10)
-    contents += gameTypeComboBox
-  }
-
-
-  val playersBox = new BoxPanel(Orientation.Vertical) {
-    border = Swing.EtchedBorder(Swing.Lowered)
-
-    contents += new BoxPanel(Orientation.Horizontal) {
-      contents += new Label("Number of players: ")
-      contents += Swing.HStrut(10)
-      contents += numberOfPlayersComboBox
-    }
-    playersList.foreach(elem => contents += elem)
-  }
-
-
-  val aisBox = new BoxPanel(Orientation.Vertical) {
-    visible = false
-    border = Swing.EtchedBorder(Swing.Lowered)
-
-    contents += new BoxPanel(Orientation.Horizontal) {
-      contents += new Label("Number of AIs: ")
-      contents += Swing.HStrut(10)
-      contents += numberOfAIComboBox
-    }
-    aisList.foreach(contents += _)
-  }
 
   def loadDimensions: (Int,Int,Int,Int) = {
     def round(squareSide: Int): Int = if (squareSide % board.size == 0) squareSide else round(squareSide-1)
@@ -154,20 +58,22 @@ class BoardPrinter(board: Board) extends Component {
       val y0 = pos.y*poolSide + offsetY
 
       counter match {
-        case 'X' => g.setColor(Color.RED)
-        case 'O' => g.setColor(Color.BLUE)
-        case 'C' => g.setColor(Color.YELLOW)
-        case 'N' => g.setColor(Color.GREEN)
-        case 'B' => g.setColor(Color.PINK)
+        case 'R' => g.setColor(Color.RED)
+        case 'B' => g.setColor(Color.BLUE)
+        case 'Y' => g.setColor(Color.YELLOW)
+        case 'G' => g.setColor(Color.GREEN)
+        case 'P' => g.setColor(Color.PINK)
       }
+      //g.fill(new Ellipse2D.Double(x0, y0, poolSide, poolSide))
       g.fillRect(x0,y0,poolSide,poolSide)
     }}
   }
 
 
   def mouseClick(x: Int, y: Int): Unit = {
-    if(isInBoard(x,y) && board.possibleMoves.contains(pointToPos(x,y)))
-      publish(PosSelected(pointToPos(x,y),board))
+    if(isInBoard(x,y) && board.possibleMoves.contains(pointToPos(x,y))) {
+      publish(PosSelected(pointToPos(x, y), board))
+    }
   }
 
   def mouseMove(x: Int, y: Int): Unit = {

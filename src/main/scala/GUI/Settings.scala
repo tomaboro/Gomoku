@@ -1,8 +1,7 @@
 package GUI
 
-
-import scala.swing.event.{ButtonClicked, Event, KeyTyped}
-import scala.swing.{BoxPanel, Button, CheckBox, Component, Dimension, FlowPanel, Frame, GridBagPanel, Label, MainFrame, Orientation, ScrollPane, Swing, TextArea, TextField, ToggleButton}
+import scala.swing._
+import scala.swing.event._
 
 case class GameInfoChanged(boardSize: Int, sequenceToWin: Int) extends Event
 
@@ -13,7 +12,7 @@ class Settings extends Frame {
   preferredSize = new Dimension(300, 200)
   resizable = false
 
-  val boardSizeField = new TextField() {
+  val boardSizeField: TextField = new TextField() {
     text = "17"
     listenTo(keys)
     reactions += {
@@ -24,7 +23,7 @@ class Settings extends Frame {
     }
   }
 
-  val sequenceToWin = new TextField() {
+  val sequenceToWin: TextField = new TextField() {
     text = "5"
     listenTo(keys)
     reactions += {

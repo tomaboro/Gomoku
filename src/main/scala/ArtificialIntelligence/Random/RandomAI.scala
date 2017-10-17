@@ -1,8 +1,9 @@
 package ArtificialIntelligence.Random
 
+import ArtificialIntelligence.GomokuAI
 import Game._
 
-object RandomAI extends GameDef {
+object RandomAI extends GomokuAI with GameDef {
 
   type GameHistory = List[Pos]
 
@@ -16,6 +17,9 @@ object RandomAI extends GameDef {
     val randomizer = scala.util.Random
     val possiblities = board.possibleMoves.toArray
 
+    Thread.sleep(1000)
     possiblities(randomizer.nextInt(possiblities.length))
   }
+
+  override def makeMove(board: Board, history: GameHistory) = RandomAIFunc(board,history)
 }

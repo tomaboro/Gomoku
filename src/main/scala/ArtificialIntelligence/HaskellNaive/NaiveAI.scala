@@ -1,8 +1,10 @@
 package ArtificialIntelligence.HaskellNaive
 
+import ArtificialIntelligence.GomokuAI
+import ArtificialIntelligence.Random.RandomAI.GameHistory
 import Game._
 
-trait NaiveAI extends Types {
+object NaiveAI extends GomokuAI with Types {
 
   def evaluateBoard(board: Board): Int = {
     val player = board.currentPlayer
@@ -60,4 +62,7 @@ trait NaiveAI extends Types {
       case Node(_,_,_,_,bestMove) => bestMove
     }
   }
+
+  override def makeMove(board: Board, history: GameHistory) =
+    chooseBestMove(generateGameTree(board,history.last,2),board.currentPlayer)
 }
