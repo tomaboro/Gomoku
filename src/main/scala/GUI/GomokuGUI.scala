@@ -18,8 +18,10 @@ class UI extends MainFrame with GameDef   {
   val downBar = new DownBar(this)
 
   def updateGameSpec(boardSizeStr: String, sequenceToWinStr: String): Unit ={
-    if(boardSizeStr.isEmpty || sequenceToWinStr.isEmpty) Dialog.showMessage(this,"You need to fill all fields!","ERROR")
-    else if(boardSizeStr.toInt > sequenceToWinStr.toInt) Dialog.showMessage(this,"Board size can't be greater then sequence to win!")
+    if(boardSizeStr.isEmpty || sequenceToWinStr.isEmpty)
+      Dialog.showMessage(this,"You need to fill all fields!","ERROR")
+    else if(boardSizeStr.toInt > sequenceToWinStr.toInt)
+      Dialog.showMessage(this,"Board size can't be greater then sequence to win!")
     else {
       gameSpecs.setBoardInfo(boardSizeStr.toInt,sequenceToWinStr.toInt)
       myMenuBar.settings.visible = false
@@ -39,11 +41,13 @@ class UI extends MainFrame with GameDef   {
 
     def startGame(): Unit = {
       gameSpecs.aiThread.stop()
-
       gameSpecs.setGameInfo(rightPanel.collectInfo.keys.toArray,rightPanel.collectInfo,List())
-      if (gameSpecs.currGamePlayerToType.isEmpty) Dialog.showMessage(this,"All players must have different names and counters","ERROR")
+      if (gameSpecs.currGamePlayerToType.isEmpty)
+        Dialog.showMessage(this,"All players must have different names and counters","ERROR")
       else {
-        val nBoard = Board.initBoard(gameSpecs.currGameBoardSize, gameSpecs.currGameSequenceToWin, gameSpecs.currGamePlayers)
+        val nBoard =
+          Board.initBoard(gameSpecs.currGameBoardSize, gameSpecs.currGameSequenceToWin,
+            gameSpecs.currGamePlayers)
 
         reprintBoard(nBoard)
         
@@ -99,7 +103,9 @@ class UI extends MainFrame with GameDef   {
 
     add(futureBoard, BorderPanel.Position.Center)
     add(downBar.bar, BorderPanel.Position.South)
-    add(new ScrollPane(rightPanel.panel){verticalScrollBarPolicy = ScrollPane.BarPolicy.Always}, BorderPanel.Position.East)
+    add(new ScrollPane(rightPanel.panel){
+      verticalScrollBarPolicy = ScrollPane.BarPolicy.Always
+    },BorderPanel.Position.East)
 
     listenTo(myMenuBar.settings.applyButton)
     listenTo(rightPanel.gameTypeComboBox.selection)
@@ -109,15 +115,25 @@ class UI extends MainFrame with GameDef   {
     listenTo(rightPanel.startButton)
 
     reactions += {
-      case SelectionChanged(rightPanel.numberOfPlayersComboBox) => rightPanel.refreshPlayersList()
-      case SelectionChanged(rightPanel.numberOfAIComboBox) => rightPanel.refreshAIList()
-      case SelectionChanged(rightPanel.gameTypeComboBox) => rightPanel.modePrinter()
-      case CursorMoved(pos) => if (pos == Pos(-134,-134)) downBar.clear else downBar.printPos(pos)
-      case PosSelected(pos,board) => makeMove(pos, board);publish(CursorMoved(pos))
+      case SelectionChanged(rightPanel.numberOfPlayersComboBox) =>
+        rightPanel.refreshPlayersList()
+      case SelectionChanged(rightPanel.numberOfAIComboBox) =>
+        rightPanel.refreshAIList()
+      case SelectionChanged(rightPanel.gameTypeComboBox) =>
+        rightPanel.modePrinter()
+      case CursorMoved(pos) =>
+        if (pos == Pos(-134,-134)) downBar.clear
+        else downBar.printPos(pos)
+      case PosSelected(pos,board) =>
+        makeMove(pos, board)
+        publish(CursorMoved(pos))
       case ButtonClicked(button) =>
-        if (button == rightPanel.startButton) startGame()
-        if(button == myMenuBar.settings.applyButton) updateGameSpec(myMenuBar.settings.boardSizeField.text,myMenuBar.settings.sequenceToWin.text)
-      case aiMadeMove(board,move) => makeMove(move,board)
+        if (button == rightPanel.startButton)
+          startGame()
+        if(button == myMenuBar.settings.applyButton)
+          updateGameSpec(myMenuBar.settings.boardSizeField.text,myMenuBar.settings.sequenceToWin.text)
+      case aiMadeMove(board,move) =>
+        makeMove(move,board)
       case gameLoaded(board,move) =>
         gameSpecs.aiThread.stop()
         makeMove(move,board)}

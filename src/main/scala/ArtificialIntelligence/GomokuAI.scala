@@ -8,6 +8,6 @@ abstract class GomokuAI {
 }
 
 object AIInfo {
-  val namesMap: Map[String,GomokuAI] = Map(("Random",Random.RandomAI),("HaskellNaive",HaskellNaive.NaiveAI))
+  val namesMap: Map[String,GomokuAI] = Map(("Random",Random.RandomAI),("HaskellNaive",HaskellNaive.NaiveAI),("AlphaBeta",AlphaBetaAI.AlhaBetaObject))
   val names: Array[String] = namesMap.keys.toArray
 }
